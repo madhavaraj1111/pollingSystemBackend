@@ -10,12 +10,12 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "*", 
+    origin: "https://pollingsystemlive.netlify.app",
     methods: ["GET", "POST"],
   },
 });
 
-const students = new Map(); 
+const students = new Map();
 let activePoll = null;
 const pollHistory = [];
 
@@ -37,7 +37,7 @@ const startPoll = (pollData) => {
     timeLeft: pollData.time,
     startTime: new Date(),
     hasEnded: false,
-    votes: new Map(), 
+    votes: new Map(),
   };
 
   activePoll.timer = setInterval(() => {
@@ -84,7 +84,6 @@ const endPoll = () => {
   console.log(" Poll ended:", completedPoll.question);
 };
 
-
 io.on("connection", (socket) => {
   console.log(" New connection:", socket.id);
 
@@ -126,7 +125,6 @@ io.on("connection", (socket) => {
     endPoll();
   });
 
-
   socket.on("teacher-message", (message) => {
     io.emit("teacher-message", {
       text: message,
@@ -166,7 +164,6 @@ io.on("connection", (socket) => {
     }
   });
 });
-
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
